@@ -1,0 +1,15 @@
+{
+  "name": "Habr Rating",
+  "description": "Expose rating of comments and articles. Github https://github.com/SergeyBondar93/habr-rating-extension",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://habr.com/*"],
+      "js": ["script.js"]
+    }
+  ]
+}
