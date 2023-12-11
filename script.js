@@ -3,6 +3,8 @@ const classNames = {
   negativeClassName: "tm-votes-meter__value_negative",
   valueClassName: "tm-votes-meter__value",
   valueBlockClassName: "tm-votes-meter",
+  valueArticleBlockClassName: "tm-votes-lever",
+  articleRatingBlockClassName: ".tm-article-rating.tm-data-icons__item",
 };
 
 const classNameRating =
@@ -41,9 +43,10 @@ const addPositiveNegativeRatings = (element) => {
     element.getElementsByClassName(classNames.positiveClassName)[0]
   )
     return;
-
-  const ratings = element
-    .getElementsByClassName(classNames.valueClassName)[0]
+  const ratings = (
+    element.getElementsByClassName(classNames.valueClassName)[0] ||
+    element.getElementsByClassName(classNames.valueArticleBlockClassName)[0]
+  )
     .getAttribute("title")
     .match(/\d+/g);
 
@@ -64,9 +67,14 @@ const addPositiveNegativeRatings = (element) => {
 };
 
 const exposeRatings = () => {
+  const article = document.querySelector(
+    classNames.articleRatingBlockClassName
+  );
   const allRatingElements = [
+    article,
     ...document.getElementsByClassName(classNames.valueBlockClassName),
-  ];
+  ].filter(Boolean);
+
   allRatingElements.forEach(addPositiveNegativeRatings);
 };
 exposeRatings();
