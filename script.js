@@ -82,7 +82,6 @@ const createFragmentWithExpandedRaiting = (elementWithRaiting) => {
 
 const injectRating = (ratingFragment, injectTo) => {
   if (!ratingFragment || !injectTo) {
-    console.log(ratingFragment, injectTo);
     return;
   }
 
