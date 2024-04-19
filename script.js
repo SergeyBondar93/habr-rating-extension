@@ -1,10 +1,21 @@
-const classNames = {
+const selectors = {
   positiveClassName: "tm-votes-meter__value_positive",
   negativeClassName: "tm-votes-meter__value_negative",
-  valueClassName: "tm-votes-meter__value",
-  valueBlockClassName: "tm-votes-meter",
-  valueArticleBlockClassName: "tm-votes-lever",
-  articleRatingBlockClassName: ".tm-article-rating.tm-data-icons__item",
+
+  articleRatingSelector:
+    "tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-article.tm-article-rating__votes-switcher",
+  injectArticleRatingSelectorTo:
+    "tm-votes-lever__score.tm-votes-lever__score_appearance-article.tm-votes-lever__score",
+
+  commentRaitingSelector:
+    "tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment.tm-comment-footer__votes-switcher",
+  injectCommentRaitingSelectorTo:
+    "tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-comment",
+
+  additionalArticlesRaitingsSelectors:
+    "tm-votes-meter__value.tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating",
+  injectAdditionalArticlesRaitingsSelectorsTo:
+    "similar-and-daily__tab-view tm-votes-meter.tm-data-icons__item",
 };
 
 const classNameRating =
@@ -13,12 +24,12 @@ const classNameRating =
 const getParams = (isPositive) => {
   if (isPositive) {
     return {
-      className: classNames.positiveClassName,
+      className: selectors.positiveClassName,
       icon: "+",
     };
   } else {
     return {
-      className: classNames.negativeClassName,
+      className: selectors.negativeClassName,
       icon: "-",
     };
   }
@@ -37,18 +48,14 @@ const createRatingElement = ({ value, isPositive }) => {
  * @param {HTMLDivElement} element
  */
 
-const addPositiveNegativeRatings = (element) => {
+const createFragmentWithExpandedRaiting = (elementWithRaiting) => {
   if (
-    element.getElementsByClassName(classNames.negativeClassName)[0] &&
-    element.getElementsByClassName(classNames.positiveClassName)[0]
+    elementWithRaiting.getElementsByClassName(selectors.negativeClassName)[0] &&
+    elementWithRaiting.getElementsByClassName(selectors.positiveClassName)[0]
   )
     return;
-  const ratings = (
-    element.getElementsByClassName(classNames.valueClassName)[0] ||
-    element.getElementsByClassName(classNames.valueArticleBlockClassName)[0]
-  )
-    .getAttribute("title")
-    .match(/\d+/g);
+
+  const ratings = elementWithRaiting.getAttribute("title")?.match(/\d*\.?\d/g);
 
   if (!ratings) return;
 
@@ -63,20 +70,66 @@ const addPositiveNegativeRatings = (element) => {
     createRatingElement({ value: negative, isPositive: false }),
     ")"
   );
-  element.append(fragment);
+  return fragment;
+};
+
+const injectRating = (ratingFragment, injectTo) => {
+  if (!ratingFragment || !injectTo) {
+    console.log(ratingFragment, injectTo);
+    return;
+  }
+
+  injectTo.appendChild(ratingFragment);
+};
+
+const addArticleRaiting = () => {
+  const article = document.querySelector("." + selectors.articleRatingSelector);
+  if (!article) return;
+
+  const fragment = createFragmentWithExpandedRaiting(article);
+
+  const injectTo = article.querySelector(
+    "." + selectors.injectArticleRatingSelectorTo
+  );
+  injectRating(fragment, injectTo);
+};
+
+const addCommentsRatings = () => {
+  const comments = document.querySelectorAll(
+    "." + selectors.commentRaitingSelector
+  );
+
+  comments.forEach((comment) => {
+    const fragment = createFragmentWithExpandedRaiting(comment);
+
+    const injectTo = comment.querySelector(
+      "." + selectors.injectCommentRaitingSelectorTo
+    );
+    injectRating(fragment, injectTo);
+  });
+};
+
+const addAdditionalArticlesRatings = () => {
+  const additionalArticles = document.querySelectorAll(
+    "." + selectors.additionalArticlesRaitingsSelectors
+  );
+  additionalArticles.forEach((article) => {
+    const fragment = createFragmentWithExpandedRaiting(article);
+    injectRating(
+      fragment,
+      article.querySelector(
+        "." + selectors.injectAdditionalArticlesRaitingsSelectorsTo
+      )
+    );
+  });
 };
 
 const exposeRatings = () => {
-  const article = document.querySelector(
-    classNames.articleRatingBlockClassName
-  );
-  const allRatingElements = [
-    article,
-    ...document.getElementsByClassName(classNames.valueBlockClassName),
-  ].filter(Boolean);
-
-  allRatingElements.forEach(addPositiveNegativeRatings);
+  addArticleRaiting();
+  addCommentsRatings();
+  addAdditionalArticlesRatings();
 };
+
 exposeRatings();
 
 window.addEventListener("scroll", exposeRatings);
