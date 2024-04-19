@@ -16,6 +16,10 @@ const selectors = {
     "tm-votes-meter__value.tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating",
   injectAdditionalArticlesRaitingsSelectorsTo:
     "similar-and-daily__tab-view tm-votes-meter.tm-data-icons__item",
+
+  articlasOnMainPageRatingSelector:
+    "tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating.tm-votes-meter__value",
+  injectarticlasOnMainPageRatingSelectorTo: "PARENT_NODE",
 };
 
 const classNameRating =
@@ -115,6 +119,7 @@ const addAdditionalArticlesRatings = () => {
   );
   additionalArticles.forEach((article) => {
     const fragment = createFragmentWithExpandedRaiting(article);
+
     injectRating(
       fragment,
       article.querySelector(
@@ -124,10 +129,25 @@ const addAdditionalArticlesRatings = () => {
   });
 };
 
+const addArticlesOnMainPageRatings = () => {
+  const articles = document.querySelectorAll(
+    "." + selectors.articlasOnMainPageRatingSelector
+  );
+  articles.forEach((article) => {
+    const fragment = createFragmentWithExpandedRaiting(article);
+
+    const injectTo = article.parentElement;
+
+    injectRating(fragment, injectTo);
+  });
+};
+
 const exposeRatings = () => {
-  addArticleRaiting();
-  addCommentsRatings();
-  addAdditionalArticlesRatings();
+  // addArticleRaiting();
+  // addCommentsRatings();
+  // addAdditionalArticlesRatings();
+
+  addArticlesOnMainPageRatings();
 };
 
 exposeRatings();
