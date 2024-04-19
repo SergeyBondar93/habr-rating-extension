@@ -47,18 +47,21 @@ const createRatingElement = ({ value, isPositive }) => {
   return element;
 };
 
+const getIsSkipping = (elementToCheck) => {
+  if (
+    elementToCheck.getElementsByClassName(selectors.negativeClassName)[0] &&
+    elementToCheck.getElementsByClassName(selectors.positiveClassName)[0]
+  )
+    return true;
+  return false;
+};
+
 /**
  *
  * @param {HTMLDivElement} element
  */
 
 const createFragmentWithExpandedRaiting = (elementWithRaiting) => {
-  if (
-    elementWithRaiting.getElementsByClassName(selectors.negativeClassName)[0] &&
-    elementWithRaiting.getElementsByClassName(selectors.positiveClassName)[0]
-  )
-    return;
-
   const ratings = elementWithRaiting.getAttribute("title")?.match(/\d*\.?\d/g);
 
   if (!ratings) return;
@@ -90,6 +93,9 @@ const addArticleRaiting = () => {
   const article = document.querySelector("." + selectors.articleRatingSelector);
   if (!article) return;
 
+  const skip = getIsSkipping(article);
+  if (skip) return;
+
   const fragment = createFragmentWithExpandedRaiting(article);
 
   const injectTo = article.querySelector(
@@ -104,6 +110,9 @@ const addCommentsRatings = () => {
   );
 
   comments.forEach((comment) => {
+    const skip = getIsSkipping(comment);
+    if (skip) return;
+
     const fragment = createFragmentWithExpandedRaiting(comment);
 
     const injectTo = comment.querySelector(
@@ -118,8 +127,10 @@ const addAdditionalArticlesRatings = () => {
     "." + selectors.additionalArticlesRaitingsSelectors
   );
   additionalArticles.forEach((article) => {
-    const fragment = createFragmentWithExpandedRaiting(article);
+    const skip = getIsSkipping(article);
+    if (skip) return;
 
+    const fragment = createFragmentWithExpandedRaiting(article);
     injectRating(
       fragment,
       article.querySelector(
@@ -134,6 +145,9 @@ const addArticlesOnMainPageRatings = () => {
     "." + selectors.articlasOnMainPageRatingSelector
   );
   articles.forEach((article) => {
+    const skip = getIsSkipping(article.parentElement);
+    if (skip) return;
+
     const fragment = createFragmentWithExpandedRaiting(article);
 
     const injectTo = article.parentElement;
@@ -143,9 +157,9 @@ const addArticlesOnMainPageRatings = () => {
 };
 
 const exposeRatings = () => {
-  // addArticleRaiting();
-  // addCommentsRatings();
-  // addAdditionalArticlesRatings();
+  addArticleRaiting();
+  addCommentsRatings();
+  addAdditionalArticlesRatings();
 
   addArticlesOnMainPageRatings();
 };
