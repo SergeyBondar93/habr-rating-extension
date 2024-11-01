@@ -3,22 +3,22 @@ const selectors = {
   negativeClassName: "tm-votes-meter__value_negative",
 
   articleRatingSelector:
-    "tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-article.tm-article-rating__votes-switcher",
+    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-article.tm-article-rating__votes-switcher",
   injectArticleRatingSelectorTo:
-    "tm-votes-lever__score.tm-votes-lever__score_appearance-article.tm-votes-lever__score",
+    ".tm-votes-lever__score.tm-votes-lever__score_appearance-article.tm-votes-lever__score",
 
   commentRaitingSelector:
-    "tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment.tm-comment-footer__votes-switcher",
+    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment.tm-comment-footer__votes-switcher",
   injectCommentRaitingSelectorTo:
-    "tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-comment",
+    ".tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-comment",
 
   additionalArticlesRaitingsSelectors:
-    "tm-votes-meter__value.tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating",
+    ".tm-votes-meter__value.tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating",
   injectAdditionalArticlesRaitingsSelectorsTo:
     "similar-and-daily__tab-view tm-votes-meter.tm-data-icons__item",
 
   articlasOnMainPageRatingSelector:
-    "tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating.tm-votes-meter__value",
+    ".tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating.tm-votes-meter__value",
   injectarticlasOnMainPageRatingSelectorTo: "PARENT_NODE",
 };
 
@@ -41,7 +41,8 @@ const getParams = (isPositive) => {
 const createRatingElement = ({ value, isPositive }) => {
   const { className, icon } = getParams(isPositive);
   const element = document.createElement("span");
-  element.className = className + classNameRating;
+  element.className = className; // + classNameRating;
+  // element.style.color = isPositive ? "#84b300" : "#ff7373";
   element.style.marginLeft = "0px";
   element.innerText = `${icon}${value}`;
   return element;
@@ -89,7 +90,7 @@ const injectRating = (ratingFragment, injectTo) => {
 };
 
 const addArticleRaiting = () => {
-  const article = document.querySelector("." + selectors.articleRatingSelector);
+  const article = document.querySelector(selectors.articleRatingSelector);
   if (!article) return;
 
   const skip = getIsSkipping(article);
@@ -98,15 +99,13 @@ const addArticleRaiting = () => {
   const fragment = createFragmentWithExpandedRaiting(article);
 
   const injectTo = article.querySelector(
-    "." + selectors.injectArticleRatingSelectorTo
+    selectors.injectArticleRatingSelectorTo
   );
   injectRating(fragment, injectTo);
 };
 
 const addCommentsRatings = () => {
-  const comments = document.querySelectorAll(
-    "." + selectors.commentRaitingSelector
-  );
+  const comments = document.querySelectorAll(selectors.commentRaitingSelector);
 
   comments.forEach((comment) => {
     const skip = getIsSkipping(comment);
@@ -115,7 +114,7 @@ const addCommentsRatings = () => {
     const fragment = createFragmentWithExpandedRaiting(comment);
 
     const injectTo = comment.querySelector(
-      "." + selectors.injectCommentRaitingSelectorTo
+      selectors.injectCommentRaitingSelectorTo
     );
     injectRating(fragment, injectTo);
   });
@@ -123,7 +122,7 @@ const addCommentsRatings = () => {
 
 const addAdditionalArticlesRatings = () => {
   const additionalArticles = document.querySelectorAll(
-    "." + selectors.additionalArticlesRaitingsSelectors
+    selectors.additionalArticlesRaitingsSelectors
   );
   additionalArticles.forEach((article) => {
     const skip = getIsSkipping(article);
@@ -133,7 +132,7 @@ const addAdditionalArticlesRatings = () => {
     injectRating(
       fragment,
       article.querySelector(
-        "." + selectors.injectAdditionalArticlesRaitingsSelectorsTo
+        selectors.injectAdditionalArticlesRaitingsSelectorsTo
       )
     );
   });
@@ -141,7 +140,7 @@ const addAdditionalArticlesRatings = () => {
 
 const addArticlesOnMainPageRatings = () => {
   const articles = document.querySelectorAll(
-    "." + selectors.articlasOnMainPageRatingSelector
+    selectors.articlasOnMainPageRatingSelector
   );
   articles.forEach((article) => {
     const skip = getIsSkipping(article.parentElement);
