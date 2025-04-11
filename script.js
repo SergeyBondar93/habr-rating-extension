@@ -3,9 +3,9 @@ const selectors = {
   negativeClassName: "tm-votes-meter__value_negative",
 
   articleRatingSelector:
-    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-article.tm-article-rating__votes-switcher",
+    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-article.votes-switcher",
   injectArticleRatingSelectorTo:
-    ".tm-votes-lever__score.tm-votes-lever__score_appearance-article.tm-votes-lever__score",
+    ".tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-article > span",
 
   commentRaitingSelector:
     ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment.tm-comment-footer__votes-switcher",
@@ -17,8 +17,8 @@ const selectors = {
   injectAdditionalArticlesRaitingsSelectorsTo:
     "similar-and-daily__tab-view tm-votes-meter.tm-data-icons__item",
 
-  articlasOnMainPageRatingSelector:
-    ".tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating.tm-votes-meter__value",
+  articlasOnMainPageRatingSelector: '[data-test-id="votes-meter-value"]',
+  // ".tm-votes-meter__value.tm-votes-meter__value_positive.tm-votes-meter__value_appearance-article.tm-votes-meter__value_rating.tm-votes-meter__value",
   injectarticlasOnMainPageRatingSelectorTo: "PARENT_NODE",
 };
 
@@ -69,7 +69,7 @@ const createFragmentWithExpandedRaiting = (elementWithRaiting) => {
 
   const [_computed, positive, negative] = ratings;
 
-  const fragment = document.createElement("div");
+  const fragment = document.createElement("span");
   fragment.style.marginLeft = "15px";
   fragment.append(
     "(",
