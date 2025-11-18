@@ -8,7 +8,7 @@ const selectors = {
     ".tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-article > span",
 
   commentRaitingSelector:
-    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment.tm-comment-footer__votes-switcher",
+    ".tm-votes-lever.tm-votes-lever.tm-votes-lever_appearance-comment",
   injectCommentRaitingSelectorTo:
     ".tm-votes-lever__score.tm-votes-lever__score.tm-votes-lever__score_appearance-comment",
 
